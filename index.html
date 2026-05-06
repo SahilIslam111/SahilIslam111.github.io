@@ -1,71 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sahil Islam | Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahil Islam | Portfolio</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
-    <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+}
 
-        header {
-            text-align: center;
-            padding: 50px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-        }
+/* 🌌 Animated Gradient Background */
+body::before {
+    content: "";
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(-45deg, #0f172a, #1e293b, #0ea5e9, #9333ea);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+    z-index: -1;
+}
 
-        h1 {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-        section {
-            padding: 40px 20px;
-            max-width: 900px;
-            margin: auto;
-        }
+/* Header */
+header {
+    text-align: center;
+    padding: 80px 20px;
+}
 
-        h2 {
-            color: #38bdf8;
-            border-bottom: 2px solid #38bdf8;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
+h1 {
+    font-size: 50px;
+    background: linear-gradient(90deg, #38bdf8, #a78bfa);
+    -webkit-background-clip: text;
+    color: transparent;
+}
 
-        .card {
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
+header p {
+    font-size: 18px;
+    opacity: 0.8;
+}
 
-        a {
-            color: #38bdf8;
-            text-decoration: none;
-        }
+/* Sections */
+section {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+}
 
-        .contact a {
-            margin-right: 15px;
-            font-size: 20px;
-        }
+h2 {
+    margin-bottom: 20px;
+    color: #38bdf8;
+}
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #020617;
-        }
-    </style>
+/* 💎 Glass Cards */
+.card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* Links */
+a {
+    color: #38bdf8;
+    text-decoration: none;
+}
+
+/* Contact Icons */
+.contact a {
+    margin-right: 20px;
+    font-size: 22px;
+    transition: 0.3s;
+}
+
+.contact a:hover {
+    color: #a78bfa;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    opacity: 0.7;
+}
+</style>
+
 </head>
 
 <body>
@@ -79,11 +121,11 @@
     <h2>About Me</h2>
     <div class="card">
         <p>
-            Hi, I am Sahil Islam. I have knowledge and hands-on experience in Signal Processing, MATLAB, 
+            Hi, I am Sahil Islam. I have hands-on experience in Signal Processing, MATLAB, 
             Machine Learning, and Natural Language Processing (NLP).
         </p>
         <p>
-            I was an active MATLAB Cody solver, where I developed strong problem-solving skills.
+            I was an active MATLAB Cody solver, strengthening my analytical and problem-solving skills.
         </p>
         <p>
             <strong>MATLAB Cody Profile:</strong><br>
@@ -92,8 +134,8 @@
             </a>
         </p>
         <p>
-            My primary programming language is Python. I have experience working with TensorFlow, PyTorch, 
-            and other machine learning libraries.
+            My primary programming language is Python. I work with TensorFlow, PyTorch, 
+            and other modern ML libraries.
         </p>
     </div>
 </section>
@@ -101,9 +143,9 @@
 <section>
     <h2>Projects</h2>
     <div class="card">
-        <p>🔹 Diabetes Prediction Web App (Machine Learning)</p>
-        <p>🔹 Bangla NER using Cross-Lingual Prompting</p>
-        <p>🔹 MATLAB Projects (Signal Processing & Problem Solving)</p>
+        <p>🚀 Diabetes Prediction Web App (Machine Learning)</p>
+        <p>🌐 Bangla NER using Cross-Lingual Prompting</p>
+        <p>📊 MATLAB Projects (Signal Processing & Optimization)</p>
     </div>
 </section>
 
@@ -111,7 +153,7 @@
     <h2>Resume</h2>
     <div class="card">
         <p>
-            📄 <a href="#">Download My Resume</a> (Upload your PDF and link it here)
+            📄 <a href="#">Download My Resume</a>
         </p>
     </div>
 </section>
@@ -119,8 +161,8 @@
 <section>
     <h2>Contact</h2>
     <div class="card contact">
-        <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
-        <a href="mailto:youremail@example.com"><i class="fas fa-envelope"></i> Email</a>
+        <a href="#">🔗 LinkedIn</a>
+        <a href="mailto:youremail@example.com">📧 Email</a>
     </div>
 </section>
 
