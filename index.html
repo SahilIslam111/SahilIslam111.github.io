@@ -13,106 +13,165 @@
     --blue: #1d4ed8;
     --blue-light: #3b82f6;
     --blue-dark: #1e40af;
+    --indigo: #3730a3;
     --mint: #d1fae5;
     --sky: #dbeafe;
-    --bg: #f0fdfa;
-    --bg2: #ecfdf5;
-    --card: #ffffff;
     --text: #1e293b;
     --text2: #475569;
-    --border: #a7f3d0;
-    --glass: rgba(255,255,255,0.7);
-    --shadow: 0 8px 32px rgba(13,148,136,0.13);
-    --shadow2: 0 2px 12px rgba(29,78,216,0.08);
+    --border: rgba(255,255,255,0.22);
+    --glass: rgba(255,255,255,0.12);
+    --glass-light: rgba(255,255,255,0.72);
+    --shadow: 0 8px 32px rgba(13,20,80,0.18);
+    --shadow2: 0 2px 12px rgba(13,20,80,0.10);
     --grad1: linear-gradient(135deg, #0d9488 0%, #1d4ed8 100%);
-    --grad2: linear-gradient(120deg, #d1fae5 0%, #dbeafe 100%);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    color: #fff;
     min-height: 100vh;
     overflow-x: hidden;
+    background: #1a1060;
   }
 
-  /* ── BACKGROUND MESH ── */
-  body::before {
-    content: '';
+  /* ══════════════════════════════════
+     GLOBAL DIAGONAL STRIPE BACKGROUND
+     (inspired by reference image)
+  ══════════════════════════════════ */
+  .bg-canvas {
     position: fixed;
     inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 10% 10%, rgba(13,148,136,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 70% 50% at 90% 80%, rgba(29,78,216,0.10) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 50% 50%, rgba(209,250,229,0.18) 0%, transparent 70%);
-    pointer-events: none;
     z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
   }
+
+  /* Base deep blue-purple gradient */
+  .bg-canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(125deg,
+      #1a0a5e 0%,
+      #1e1488 18%,
+      #1a2fa8 36%,
+      #1565c0 52%,
+      #0288d1 68%,
+      #00acc1 84%,
+      #26c6da 100%
+    );
+  }
+
+  /* Diagonal stripe bands — exact aesthetic from the image */
+  .bg-canvas::after {
+    content: '';
+    position: absolute;
+    inset: -200%;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent 0px,
+      transparent 60px,
+      rgba(255,255,255,0.045) 60px,
+      rgba(255,255,255,0.045) 120px,
+      transparent 120px,
+      transparent 200px,
+      rgba(255,255,255,0.025) 200px,
+      rgba(255,255,255,0.025) 260px
+    );
+    animation: stripeShift 22s linear infinite;
+  }
+
+  @keyframes stripeShift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(300px); }
+  }
+
+  /* Extra luminous swaths, like the bright cyan top-right sweep */
+  .bg-glow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 55% 75% at 95% 5%,  rgba(0,188,212,0.38) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 50% at 80% 50%,  rgba(21,101,192,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 5%  90%,  rgba(26,14,94,0.45)  0%, transparent 70%);
+  }
+
+  /* ── SECTION TINTS (each section gets a subtle overlay color) ── */
+  section { position: relative; z-index: 1; }
+
+  #home         .sec-tint { background: transparent; }
+  #education    .sec-tint { background: rgba(13,148,136,0.08); }
+  #research     .sec-tint { background: rgba(29,78,216,0.09); }
+  #projects     .sec-tint { background: rgba(8,145,178,0.08); }
+  #skills       .sec-tint { background: rgba(99,102,241,0.09); }
+  #other-profiles .sec-tint { background: rgba(13,148,136,0.07); }
+  #cv           .sec-tint { background: rgba(29,78,216,0.08); }
+
+  .sec-tint {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  section > .container { position: relative; z-index: 1; }
 
   /* ── NAV ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: rgba(240,253,250,0.82);
-    backdrop-filter: blur(18px);
-    border-bottom: 1.5px solid var(--border);
+    z-index: 200;
+    background: rgba(16,10,72,0.72);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.10);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 2.5rem;
     height: 64px;
-    box-shadow: 0 2px 24px rgba(13,148,136,0.08);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.28);
   }
 
   .nav-logo {
     font-family: 'Playfair Display', serif;
     font-weight: 900;
-    font-size: 1.5rem;
-    background: var(--grad1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 1.4rem;
+    color: #fff;
     letter-spacing: -0.02em;
   }
 
-  .nav-links {
-    display: flex;
-    gap: 0.15rem;
-    list-style: none;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
+  .nav-logo span { color: #26c6da; }
+
+  .nav-links { display: flex; gap: 0.1rem; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
 
   .nav-links a {
     display: block;
-    padding: 0.45rem 0.85rem;
+    padding: 0.42rem 0.82rem;
     border-radius: 999px;
     font-size: 0.82rem;
     font-weight: 500;
-    color: var(--text2);
+    color: rgba(255,255,255,0.75);
     text-decoration: none;
     transition: background 0.2s, color 0.2s;
     letter-spacing: 0.01em;
   }
 
   .nav-links a:hover, .nav-links a.active {
-    background: var(--grad1);
-    color: white;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
   }
 
   /* ── HAMBURGER ── */
   .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 110; }
-  .hamburger span { display: block; width: 26px; height: 2.5px; background: var(--teal); border-radius: 99px; transition: 0.3s; }
+  .hamburger span { display: block; width: 26px; height: 2.5px; background: #fff; border-radius: 99px; transition: 0.3s; }
 
   /* ── SECTIONS ── */
   section {
-    position: relative;
-    z-index: 1;
     min-height: 100vh;
     padding: 100px 2rem 60px;
     display: flex;
@@ -125,39 +184,34 @@
   /* ── SECTION TITLE ── */
   .section-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-size: clamp(2rem, 4vw, 2.7rem);
     font-weight: 900;
-    color: var(--text);
+    color: #fff;
     margin-bottom: 0.5rem;
     letter-spacing: -0.03em;
   }
 
-  .section-title span {
-    background: var(--grad1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+  .section-title span { color: #26c6da; }
 
   .section-line {
-    width: 60px; height: 4px;
-    background: var(--grad1);
+    width: 52px; height: 3px;
+    background: linear-gradient(90deg, #26c6da, #1d4ed8);
     border-radius: 99px;
     margin-bottom: 2.5rem;
   }
 
-  /* ── CARD ── */
+  /* ── GLASS CARD ── */
   .card {
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.16);
     border-radius: 20px;
     padding: 2rem;
     box-shadow: var(--shadow);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
     transition: transform 0.25s, box-shadow 0.25s;
   }
 
-  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(13,148,136,0.16); }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.28); }
 
   /* ══════════════════════════════════
      HOME
@@ -170,15 +224,12 @@
   }
 
   .home-text .greeting {
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--teal);
+    color: #26c6da;
     margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
   }
 
   .home-text h1 {
@@ -188,112 +239,94 @@
     line-height: 1.05;
     letter-spacing: -0.04em;
     margin-bottom: 1rem;
+    color: #fff;
   }
 
-  .home-text h1 .name {
-    background: var(--grad1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+  .home-text h1 .name { color: #26c6da; }
 
   .home-text .tagline {
-    font-size: 1rem;
-    color: var(--text2);
-    line-height: 1.7;
+    font-size: 0.97rem;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.72;
     margin-bottom: 2rem;
     max-width: 440px;
   }
 
-  .badge-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .badge-row { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-bottom: 2rem; }
 
   .badge {
-    padding: 0.35rem 0.9rem;
+    padding: 0.32rem 0.85rem;
     border-radius: 999px;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-weight: 600;
     letter-spacing: 0.03em;
   }
 
-  .badge-teal { background: var(--mint); color: var(--teal-dark); border: 1px solid #6ee7b7; }
-  .badge-blue { background: var(--sky); color: var(--blue-dark); border: 1px solid #93c5fd; }
+  .badge-teal { background: rgba(13,148,136,0.22); color: #5eead4; border: 1px solid rgba(94,234,212,0.3); }
+  .badge-blue { background: rgba(59,130,246,0.18); color: #93c5fd; border: 1px solid rgba(147,197,253,0.3); }
 
-  /* CONTACT BOX */
+  /* ── CONTACT BOX ── */
   .contact-box {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
     border-radius: 16px;
     padding: 1rem 1.4rem;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     box-shadow: var(--shadow2);
-    max-width: 340px;
   }
 
-  .contact-box p { font-size: 0.8rem; color: var(--text2); font-weight: 500; margin-bottom: 0.6rem; }
+  .contact-box-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.45);
+  }
 
-  .contact-icons { display: flex; gap: 0.85rem; }
+  .contact-icons { display: flex; gap: 0.75rem; align-items: center; }
 
   .contact-icon {
     width: 42px; height: 42px;
-    border-radius: 12px;
+    border-radius: 11px;
     display: flex; align-items: center; justify-content: center;
     text-decoration: none;
-    font-size: 1.15rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.10);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
   }
 
-  .contact-icon::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: var(--grad1);
-    opacity: 0;
-    transition: opacity 0.2s;
-    border-radius: inherit;
+  .contact-icon:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   }
 
-  .contact-icon:hover::before { opacity: 1; }
-  .contact-icon:hover { transform: scale(1.12); box-shadow: 0 4px 16px rgba(13,148,136,0.3); }
+  .contact-icon svg { width: 20px; height: 20px; fill: rgba(255,255,255,0.85); display: block; }
+  .contact-icon:hover svg { fill: #fff; }
 
-  .contact-icon svg { width: 20px; height: 20px; position: relative; z-index: 1; fill: var(--teal-dark); transition: fill 0.2s; }
-  .contact-icon:hover svg { fill: white; }
-  .contact-icon { background: var(--mint); border: 1.5px solid #6ee7b7; }
-
-  /* PROFILE IMAGE */
+  /* ── PROFILE IMAGE ── */
   .home-image-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
   }
 
   .profile-ring {
     position: relative;
-    width: 320px; height: 320px;
+    width: 310px; height: 310px;
   }
 
   .profile-ring::before {
     content: '';
     position: absolute;
-    inset: -8px;
+    inset: -6px;
     border-radius: 50%;
-    background: var(--grad1);
-    animation: spin 8s linear infinite;
-    opacity: 0.25;
-  }
-
-  .profile-ring::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 3px dashed var(--teal-light);
-    animation: spin 14s linear infinite reverse;
-    opacity: 0.4;
+    background: linear-gradient(135deg, #26c6da, #1d4ed8, #7c3aed);
+    opacity: 0.5;
+    animation: spin 10s linear infinite;
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -303,10 +336,10 @@
     z-index: 2;
     width: 100%; height: 100%;
     border-radius: 50%;
-    background: var(--grad2);
-    border: 4px solid white;
+    background: linear-gradient(135deg, rgba(38,198,218,0.3), rgba(29,78,216,0.3));
+    border: 3px solid rgba(255,255,255,0.25);
     overflow: hidden;
-    box-shadow: 0 12px 48px rgba(13,148,136,0.2);
+    box-shadow: 0 16px 56px rgba(0,0,0,0.35);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
   }
@@ -314,17 +347,15 @@
   .profile-placeholder img {
     width: 100%; height: 100%;
     object-fit: cover;
-    display: block;
+    display: none;
+    position: absolute; inset: 0;
+    border-radius: 50%;
   }
 
   .profile-placeholder .img-upload-hint {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(13,148,136,0.08);
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.35);
     opacity: 0;
     transition: opacity 0.3s;
     border-radius: 50%;
@@ -332,15 +363,13 @@
 
   .profile-placeholder:hover .img-upload-hint { opacity: 1; }
 
-  .profile-placeholder .img-upload-hint span {
-    font-size: 0.8rem;
+  .img-upload-hint span {
+    font-size: 0.78rem;
     font-weight: 600;
-    color: var(--teal-dark);
-    text-align: center;
-    padding: 0.4rem;
-    background: white;
+    color: #fff;
+    background: rgba(0,0,0,0.55);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 0.35rem 0.7rem;
   }
 
   #profileUpload { display: none; }
@@ -349,90 +378,82 @@
     font-family: 'Playfair Display', serif;
     font-size: 4.5rem;
     font-weight: 900;
-    background: var(--grad1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: rgba(255,255,255,0.6);
     line-height: 1;
   }
 
   /* ══════════════════════════════════
      EDUCATION
   ══════════════════════════════════ */
-  .timeline { position: relative; padding-left: 2rem; }
+  .timeline { position: relative; padding-left: 2.2rem; }
 
   .timeline::before {
     content: '';
     position: absolute;
     left: 10px; top: 0; bottom: 0;
     width: 2px;
-    background: linear-gradient(to bottom, var(--teal), var(--blue-light));
+    background: linear-gradient(to bottom, #26c6da, #1d4ed8);
     border-radius: 99px;
   }
 
-  .timeline-item {
-    position: relative;
-    margin-bottom: 2rem;
-    animation: fadeUp 0.5s ease both;
-  }
+  .timeline-item { position: relative; margin-bottom: 2rem; }
 
   .timeline-dot {
     position: absolute;
-    left: -2rem;
-    top: 1.2rem;
-    width: 18px; height: 18px;
+    left: -2.2rem;
+    top: 1.3rem;
+    width: 16px; height: 16px;
     border-radius: 50%;
-    background: var(--grad1);
-    border: 3px solid white;
-    box-shadow: 0 0 0 3px rgba(13,148,136,0.2);
-    transform: translateX(-3px);
+    background: linear-gradient(135deg, #26c6da, #1d4ed8);
+    border: 2.5px solid rgba(255,255,255,0.4);
+    box-shadow: 0 0 0 4px rgba(38,198,218,0.18);
+    transform: translateX(-2px);
   }
 
   .edu-card {
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 16px;
-    padding: 1.5rem;
-    backdrop-filter: blur(10px);
+    padding: 1.5rem 1.6rem;
+    backdrop-filter: blur(12px);
     box-shadow: var(--shadow2);
     transition: transform 0.2s, box-shadow 0.2s;
   }
 
-  .edu-card:hover { transform: translateX(6px); box-shadow: var(--shadow); }
+  .edu-card:hover { transform: translateX(7px); box-shadow: var(--shadow); }
 
   .edu-card .level {
-    font-size: 0.72rem;
+    font-size: 0.70rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--teal);
-    margin-bottom: 0.3rem;
-    display: flex; align-items: center; gap: 0.4rem;
+    color: #5eead4;
+    margin-bottom: 0.35rem;
   }
 
   .edu-card h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
+    font-size: 1.18rem;
     font-weight: 700;
-    color: var(--text);
+    color: #fff;
     margin-bottom: 0.15rem;
   }
 
   .edu-card .institution {
-    font-size: 0.88rem;
-    color: var(--text2);
-    margin-bottom: 0.5rem;
+    font-size: 0.86rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.6rem;
   }
 
   .gpa-pill {
     display: inline-block;
-    background: var(--grad1);
-    color: white;
-    font-size: 0.78rem;
+    background: linear-gradient(135deg, #26c6da, #1d4ed8);
+    color: #fff;
+    font-size: 0.76rem;
     font-weight: 700;
-    padding: 0.25rem 0.8rem;
+    padding: 0.25rem 0.85rem;
     border-radius: 999px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
   }
 
   /* ══════════════════════════════════
@@ -440,13 +461,13 @@
   ══════════════════════════════════ */
   .research-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
     gap: 1.5rem;
   }
 
   .research-card {
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 20px;
     padding: 2rem 1.6rem;
     backdrop-filter: blur(12px);
@@ -456,97 +477,110 @@
     overflow: hidden;
   }
 
-  .research-card::before {
+  .research-card::after {
     content: '';
     position: absolute;
-    top: -40px; right: -40px;
-    width: 100px; height: 100px;
+    top: -50px; right: -50px;
+    width: 110px; height: 110px;
     border-radius: 50%;
-    background: var(--grad1);
-    opacity: 0.08;
+    background: linear-gradient(135deg, #26c6da, #1d4ed8);
+    opacity: 0.09;
     transition: transform 0.4s;
   }
 
-  .research-card:hover::before { transform: scale(2); }
+  .research-card:hover::after { transform: scale(2.2); }
   .research-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
 
-  .research-icon {
-    font-size: 2.2rem;
+  .research-card .rc-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(38,198,218,0.25), rgba(29,78,216,0.25));
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
     margin-bottom: 1rem;
-    display: block;
   }
+
+  .research-card .rc-icon svg { width: 22px; height: 22px; fill: #26c6da; }
 
   .research-card h3 {
     font-family: 'Playfair Display', serif;
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--text);
+    color: #fff;
     margin-bottom: 0.6rem;
   }
 
   .research-card p {
-    font-size: 0.88rem;
-    color: var(--text2);
+    font-size: 0.87rem;
+    color: rgba(255,255,255,0.65);
     line-height: 1.65;
   }
 
   .research-tag {
     display: inline-block;
     margin-top: 0.8rem;
-    font-size: 0.72rem;
+    margin-right: 0.3rem;
+    font-size: 0.70rem;
     font-weight: 600;
     padding: 0.2rem 0.65rem;
     border-radius: 999px;
-    background: var(--mint);
-    color: var(--teal-dark);
-    border: 1px solid #6ee7b7;
+    background: rgba(38,198,218,0.15);
+    color: #5eead4;
+    border: 1px solid rgba(94,234,212,0.25);
   }
 
   /* ══════════════════════════════════
      PROJECTS
   ══════════════════════════════════ */
   .projects-upload-area {
-    border: 2px dashed var(--teal-light);
+    border: 1.5px dashed rgba(38,198,218,0.5);
     border-radius: 16px;
     padding: 2rem;
     text-align: center;
-    background: rgba(209,250,229,0.25);
+    background: rgba(38,198,218,0.06);
     cursor: pointer;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     transition: background 0.2s, border-color 0.2s;
-    position: relative;
   }
 
-  .projects-upload-area:hover { background: rgba(209,250,229,0.45); border-color: var(--teal); }
+  .projects-upload-area:hover { background: rgba(38,198,218,0.12); border-color: #26c6da; }
   .projects-upload-area input { display: none; }
 
-  .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-  .upload-label { font-size: 0.9rem; color: var(--text2); }
-  .upload-label b { color: var(--teal); }
-
-  .upload-types {
-    display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; flex-wrap: wrap;
+  .upload-icon-wrap {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 0.75rem;
   }
 
+  .upload-icon-wrap svg { width: 24px; height: 24px; fill: #26c6da; }
+
+  .upload-label { font-size: 0.88rem; color: rgba(255,255,255,0.72); }
+  .upload-label b { color: #26c6da; }
+
+  .upload-types { display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.75rem; flex-wrap: wrap; }
+
   .upload-type-badge {
-    font-size: 0.72rem; font-weight: 600;
+    font-size: 0.70rem; font-weight: 600;
     padding: 0.2rem 0.7rem;
     border-radius: 999px;
-    background: white;
-    border: 1.5px solid var(--border);
-    color: var(--text2);
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: rgba(255,255,255,0.7);
   }
 
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
     gap: 1.2rem;
     margin-top: 1rem;
   }
 
   .project-card {
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 16px;
     overflow: hidden;
     box-shadow: var(--shadow2);
@@ -557,263 +591,360 @@
 
   .project-media {
     width: 100%; height: 160px;
-    background: var(--grad2);
+    background: linear-gradient(135deg, rgba(38,198,218,0.2), rgba(29,78,216,0.2));
     display: flex; align-items: center; justify-content: center;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
 
-  .project-media img, .project-media video {
-    width: 100%; height: 100%; object-fit: cover;
+  .project-media img, .project-media video { width: 100%; height: 100%; object-fit: cover; }
+
+  .project-media .media-icon-wrap {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
   }
 
-  .project-media .media-icon { font-size: 3rem; opacity: 0.5; }
+  .project-media .media-icon-wrap svg { width: 26px; height: 26px; fill: rgba(255,255,255,0.7); }
 
   .project-body { padding: 1rem; }
-  .project-body h4 { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
-  .project-body p { font-size: 0.82rem; color: var(--text2); line-height: 1.55; }
+  .project-body h4 { font-weight: 700; font-size: 0.93rem; margin-bottom: 0.3rem; color: #fff; }
+  .project-body p { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.55; }
 
   .project-delete {
-    position: absolute; top: 6px; right: 6px;
-    background: rgba(255,255,255,0.85);
+    position: absolute; top: 7px; right: 7px;
+    background: rgba(0,0,0,0.45);
     border: none; border-radius: 50%;
     width: 26px; height: 26px;
     cursor: pointer;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     display: flex; align-items: center; justify-content: center;
-    color: #ef4444;
+    color: #fca5a5;
     transition: background 0.2s;
   }
 
-  .project-delete:hover { background: #fee2e2; }
+  .project-delete:hover { background: rgba(239,68,68,0.6); color: #fff; }
+
+  .add-text-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 16px;
+    padding: 1.4rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .add-text-card h4 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #5eead4;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .proj-input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    margin-bottom: 0.6rem;
+    transition: border-color 0.2s;
+  }
+
+  .proj-input::placeholder { color: rgba(255,255,255,0.35); }
+  .proj-input:focus { border-color: #26c6da; }
+
+  textarea.proj-input { min-height: 80px; resize: vertical; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    background: linear-gradient(135deg, #26c6da, #1d4ed8);
+    color: #fff;
+    border: none; border-radius: 10px;
+    padding: 0.65rem 1.4rem;
+    font-size: 0.87rem; font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    text-decoration: none;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
 
   /* ══════════════════════════════════
      SKILLS
   ══════════════════════════════════ */
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
     gap: 1.2rem;
   }
 
   .skill-category {
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.13);
     border-radius: 18px;
-    padding: 1.5rem;
+    padding: 1.4rem;
     backdrop-filter: blur(10px);
-    box-shadow: var(--shadow2);
   }
 
   .skill-category h4 {
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--teal);
+    letter-spacing: 0.12em;
+    color: #5eead4;
     margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 0.4rem;
   }
 
   .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
   .skill-tag {
-    background: var(--grad2);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 0.35rem 0.7rem;
-    font-size: 0.8rem;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 7px;
+    padding: 0.32rem 0.68rem;
+    font-size: 0.79rem;
     font-weight: 600;
-    color: var(--text);
+    color: rgba(255,255,255,0.82);
     font-family: 'Fira Code', monospace;
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: background 0.15s, transform 0.15s;
   }
 
   .skill-tag:hover {
+    background: rgba(38,198,218,0.25);
+    color: #fff;
     transform: scale(1.06);
-    box-shadow: 0 3px 10px rgba(13,148,136,0.18);
-    background: var(--grad1);
-    color: white;
-    border-color: transparent;
+    border-color: rgba(94,234,212,0.3);
   }
 
   /* ══════════════════════════════════
      OTHER PROFILES
   ══════════════════════════════════ */
-  .profiles-container { max-width: 700px; }
+  .profiles-container { max-width: 680px; }
 
   .profile-dropdown-wrap { position: relative; margin-bottom: 1.5rem; }
 
   .profile-select {
     width: 100%;
     appearance: none;
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.16);
     border-radius: 12px;
     padding: 0.9rem 3rem 0.9rem 1.2rem;
     font-size: 0.95rem;
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
-    color: var(--text);
+    color: #fff;
     cursor: pointer;
-    box-shadow: var(--shadow2);
-    backdrop-filter: blur(8px);
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.2s;
   }
 
-  .profile-select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(13,148,136,0.15); }
+  .profile-select option { background: #1a1060; color: #fff; }
+  .profile-select:focus { border-color: #26c6da; }
 
   .dropdown-arrow {
-    position: absolute;
-    right: 1rem; top: 50%;
+    position: absolute; right: 1rem; top: 50%;
     transform: translateY(-50%);
-    pointer-events: none;
-    color: var(--teal);
+    pointer-events: none; color: #26c6da;
   }
 
-  .profile-panel {
-    display: none;
-    animation: fadeUp 0.35s ease;
-  }
-
+  .profile-panel { display: none; animation: fadeUp 0.35s ease; }
   .profile-panel.active { display: block; }
 
   .profile-info-card {
-    background: var(--glass);
-    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 20px;
     padding: 2rem;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
     box-shadow: var(--shadow);
   }
 
-  .profile-platform {
-    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem;
-  }
+  .profile-platform { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
 
   .platform-logo {
     width: 52px; height: 52px; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.8rem;
-    border: 1.5px solid var(--border);
-    background: white;
-    box-shadow: var(--shadow2);
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.15);
   }
 
-  .platform-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
-  .platform-sub { font-size: 0.82rem; color: var(--text2); }
+  .platform-logo svg { width: 28px; height: 28px; fill: #26c6da; }
+
+  .platform-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: #fff; }
+  .platform-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); }
 
   .stats-row { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.2rem 0; }
 
   .stat-box {
-    flex: 1; min-width: 100px;
-    background: var(--grad2);
-    border: 1.5px solid var(--border);
+    flex: 1; min-width: 95px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
     border-radius: 12px;
-    padding: 0.85rem;
+    padding: 0.9rem 0.7rem;
     text-align: center;
   }
 
   .stat-box .stat-num {
     font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-weight: 900;
-    background: var(--grad1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #26c6da;
     display: block;
   }
 
-  .stat-box .stat-label { font-size: 0.73rem; color: var(--text2); font-weight: 600; }
+  .stat-box .stat-label { font-size: 0.70rem; color: rgba(255,255,255,0.55); font-weight: 600; }
 
-  .profile-link-btn {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: var(--grad1);
-    color: white;
-    text-decoration: none;
-    padding: 0.65rem 1.4rem;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-top: 1rem;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 4px 14px rgba(13,148,136,0.28);
-  }
-
-  .profile-link-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+  .profile-desc { font-size: 0.87rem; color: rgba(255,255,255,0.65); line-height: 1.65; margin-bottom: 0.5rem; }
 
   /* ══════════════════════════════════
      CV
   ══════════════════════════════════ */
-  .cv-container { max-width: 680px; text-align: center; }
+  .cv-container { max-width: 640px; text-align: center; }
 
   .cv-upload-zone {
-    border: 2px dashed var(--teal-light);
+    border: 1.5px dashed rgba(38,198,218,0.5);
     border-radius: 24px;
     padding: 3rem 2rem;
-    background: rgba(209,250,229,0.2);
+    background: rgba(38,198,218,0.06);
     cursor: pointer;
     transition: all 0.3s;
-    margin-bottom: 2rem;
-    position: relative;
+    margin-bottom: 1.8rem;
   }
 
   .cv-upload-zone:hover, .cv-upload-zone.drag-over {
-    background: rgba(209,250,229,0.45);
-    border-color: var(--teal);
+    background: rgba(38,198,218,0.12);
+    border-color: #26c6da;
     transform: scale(1.01);
   }
 
   .cv-upload-zone input { display: none; }
-  .cv-upload-icon { font-size: 3.5rem; margin-bottom: 0.8rem; }
-  .cv-upload-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem; }
-  .cv-upload-sub { font-size: 0.88rem; color: var(--text2); }
+
+  .cv-upload-icon-wrap {
+    width: 64px; height: 64px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+
+  .cv-upload-icon-wrap svg { width: 30px; height: 30px; fill: #26c6da; }
+
+  .cv-upload-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+  .cv-upload-sub { font-size: 0.86rem; color: rgba(255,255,255,0.55); }
 
   .cv-file-info {
     display: none;
-    background: var(--glass);
-    border: 1.5px solid var(--border);
-    border-radius: 16px;
-    padding: 1.5rem;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    padding: 1.2rem 1.4rem;
     align-items: center;
     gap: 1rem;
     text-align: left;
     margin-bottom: 1.5rem;
-    box-shadow: var(--shadow2);
   }
 
   .cv-file-info.visible { display: flex; }
 
-  .cv-file-icon { font-size: 2.5rem; }
-  .cv-file-name { font-weight: 700; font-size: 0.95rem; }
-  .cv-file-size { font-size: 0.8rem; color: var(--text2); }
-
-  .btn-download {
-    display: inline-flex; align-items: center; gap: 0.6rem;
-    background: var(--grad1);
-    color: white;
-    border: none;
-    padding: 0.85rem 2rem;
+  .cv-file-icon-wrap {
+    width: 44px; height: 44px;
     border-radius: 12px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 6px 20px rgba(13,148,136,0.3);
-    text-decoration: none;
+    background: rgba(38,198,218,0.18);
+    border: 1px solid rgba(38,198,218,0.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
   }
 
-  .btn-download:hover { opacity: 0.9; transform: translateY(-2px); }
-  .btn-download:disabled { opacity: 0.5; cursor: not-allowed; }
+  .cv-file-icon-wrap svg { width: 22px; height: 22px; fill: #26c6da; }
+  .cv-file-name { font-weight: 700; font-size: 0.93rem; color: #fff; }
+  .cv-file-size { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+
+  .btn-remove {
+    margin-left: auto; background: none;
+    border: 1px solid rgba(252,165,165,0.4);
+    border-radius: 8px; padding: 0.3rem 0.75rem;
+    color: #fca5a5; cursor: pointer;
+    font-size: 0.78rem; font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .btn-remove:hover { background: rgba(239,68,68,0.2); }
+
+  .cv-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .cv-note { font-size: 0.76rem; color: rgba(255,255,255,0.38); margin-top: 1.2rem; }
 
   /* ══════════════════════════════════
-     ANIMATIONS
+     FOOTER
   ══════════════════════════════════ */
+  footer {
+    position: relative; z-index: 1;
+    padding: 2.5rem 2rem;
+    background: rgba(0,0,0,0.35);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+  }
+
+  .footer-left {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .footer-left span { color: #26c6da; }
+
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .footer-contact-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.38);
+  }
+
+  .footer-icons { display: flex; gap: 0.6rem; }
+
+  .footer-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .footer-icon:hover { background: rgba(38,198,218,0.25); transform: translateY(-3px); }
+  .footer-icon svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.75); display: block; }
+  .footer-icon:hover svg { fill: #fff; }
+
+  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(22px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .fade-in { animation: fadeUp 0.6s ease both; }
@@ -827,68 +958,25 @@
     #home .container { grid-template-columns: 1fr; text-align: center; }
     .home-image-wrap { order: -1; }
     .profile-ring { width: 220px; height: 220px; }
-    .badge-row, .contact-box { justify-content: center; }
-    .contact-box { max-width: 100%; }
-    .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: rgba(240,253,250,0.97); padding: 1rem; border-bottom: 1px solid var(--border); }
+    .badge-row { justify-content: center; }
+    .contact-box { align-self: center; }
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: rgba(16,10,72,0.97); padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .nav-links.open { display: flex; }
     .hamburger { display: flex; }
+    footer { flex-direction: column; align-items: flex-start; }
+    .footer-contact { align-items: flex-start; }
   }
-
-  /* ── FOOTER ── */
-  footer {
-    position: relative; z-index: 1;
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.8rem;
-    color: var(--text2);
-    border-top: 1px solid var(--border);
-    background: rgba(240,253,250,0.6);
-    backdrop-filter: blur(10px);
-  }
-
-  footer span { color: var(--teal); font-weight: 700; }
-
-  /* ── ACTIVE SECTION INDICATOR ── */
-  section:nth-child(even) { background: rgba(219,234,254,0.08); }
-
-  .add-text-area {
-    width: 100%;
-    min-height: 80px;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    padding: 0.75rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    color: var(--text);
-    background: rgba(255,255,255,0.8);
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.2s;
-    margin-top: 0.6rem;
-  }
-
-  .add-text-area:focus { border-color: var(--teal); }
-
-  .btn-add-project {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    background: var(--grad1); color: white;
-    border: none; border-radius: 10px;
-    padding: 0.65rem 1.3rem;
-    font-size: 0.88rem; font-weight: 700;
-    cursor: pointer; margin-top: 0.8rem;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 4px 14px rgba(13,148,136,0.25);
-  }
-
-  .btn-add-project:hover { opacity: 0.9; transform: translateY(-1px); }
-
 </style>
 </head>
 <body>
 
+<!-- Background layers -->
+<div class="bg-canvas"></div>
+<div class="bg-glow"></div>
+
 <!-- ── NAV ── -->
-<nav id="navbar">
-  <div class="nav-logo">Sahil Islam</div>
+<nav>
+  <div class="nav-logo">Sahil <span>Islam</span></div>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
@@ -903,48 +991,39 @@
   </ul>
 </nav>
 
-<!-- ══════════════════════════════════
-     HOME
-══════════════════════════════════ -->
+<!-- ══════════════════════════════════  HOME  ══════════════════════════════════ -->
 <section id="home">
+  <div class="sec-tint"></div>
   <div class="container">
     <div class="home-text fade-in">
-      <p class="greeting">👋 Welcome</p>
+      <p class="greeting">Welcome</p>
       <h1>Hi, I am<br><span class="name">Sahil Islam</span></h1>
       <p class="tagline">
         Currently in my 4th year, pursuing a <strong>BSc in Electrical and Electronic Engineering (EEE)</strong> at Islamic University of Technology (IUT). Passionate about building intelligent systems and solving complex engineering problems.
       </p>
 
       <div class="badge-row delay-1">
-        <span class="badge badge-teal">⚡ EEE Student</span>
-        <span class="badge badge-blue">🤖 AI/ML Enthusiast</span>
-        <span class="badge badge-teal">📐 4th Year</span>
-        <span class="badge badge-blue">🏛 IUT, Dhaka</span>
+        <span class="badge badge-teal">EEE Student</span>
+        <span class="badge badge-blue">AI / ML Enthusiast</span>
+        <span class="badge badge-teal">4th Year</span>
+        <span class="badge badge-blue">IUT, Dhaka</span>
       </div>
 
-      <div class="contact-box delay-2 fade-in">
-        <div>
-          <p>Get in touch · Connect with me</p>
-          <div class="contact-icons">
-            <!-- Email -->
-            <a class="contact-icon" href="mailto:sahilisalm@iut-dhaka.edu" title="Email: sahilisalm@iut-dhaka.edu" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2-8 5-8-5h16zm0 12H4V8.99l8 5 8-5V18z"/>
-              </svg>
-            </a>
-            <!-- LinkedIn -->
-            <a class="contact-icon" href="https://www.linkedin.com/in/sahilislam/?isSelfProfile=false" title="LinkedIn Profile" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-              </svg>
-            </a>
-            <!-- GitHub placeholder -->
-            <a class="contact-icon" href="https://github.com/" title="GitHub" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
-              </svg>
-            </a>
-          </div>
+      <div class="contact-box fade-in delay-2">
+        <p class="contact-box-label">Get in touch</p>
+        <div class="contact-icons">
+          <!-- Email -->
+          <a class="contact-icon" href="mailto:sahilisalm@iut-dhaka.edu" title="sahilisalm@iut-dhaka.edu">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2-8 5-8-5h16zm0 12H4V8.99l8 5 8-5V18z"/></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a class="contact-icon" href="https://www.linkedin.com/in/sahilislam/?isSelfProfile=false" title="LinkedIn" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+          </a>
+          <!-- GitHub -->
+          <a class="contact-icon" href="https://github.com/" title="GitHub" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+          </a>
         </div>
       </div>
     </div>
@@ -953,10 +1032,8 @@
       <div class="profile-ring">
         <div class="profile-placeholder" onclick="document.getElementById('profileUpload').click()">
           <div class="profile-initials" id="profileInitials">SI</div>
-          <img id="profileImg" src="" alt="Sahil Islam" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%;">
-          <div class="img-upload-hint">
-            <span>📷 Upload Photo</span>
-          </div>
+          <img id="profileImg" src="" alt="Sahil Islam">
+          <div class="img-upload-hint"><span>Upload Photo</span></div>
         </div>
         <input type="file" id="profileUpload" accept="image/*" onchange="uploadProfilePhoto(event)">
       </div>
@@ -964,10 +1041,9 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     EDUCATION
-══════════════════════════════════ -->
+<!-- ══════════════════════════════════  EDUCATION  ══════════════════════════════════ -->
 <section id="education">
+  <div class="sec-tint"></div>
   <div class="container">
     <h2 class="section-title fade-in">My <span>Education</span></h2>
     <div class="section-line"></div>
@@ -976,7 +1052,7 @@
       <div class="timeline-item fade-in delay-1">
         <div class="timeline-dot"></div>
         <div class="edu-card">
-          <p class="level">🎓 SSC — Secondary School Certificate</p>
+          <p class="level">Secondary School Certificate — SSC</p>
           <h3>Chattogram Collegiate School</h3>
           <p class="institution">Chattogram, Bangladesh</p>
           <span class="gpa-pill">GPA 5.00 / 5.00</span>
@@ -986,7 +1062,7 @@
       <div class="timeline-item fade-in delay-2">
         <div class="timeline-dot"></div>
         <div class="edu-card">
-          <p class="level">🏫 HSC — Higher Secondary Certificate</p>
+          <p class="level">Higher Secondary Certificate — HSC</p>
           <h3>Chattogram College</h3>
           <p class="institution">Chattogram, Bangladesh</p>
           <span class="gpa-pill">GPA 5.00 / 5.00</span>
@@ -996,47 +1072,55 @@
       <div class="timeline-item fade-in delay-3">
         <div class="timeline-dot"></div>
         <div class="edu-card">
-          <p class="level">🏛 BSc — Bachelor of Science in Engineering</p>
+          <p class="level">Bachelor of Science in Engineering — BSc</p>
           <h3>Electrical and Electronic Engineering (EEE)</h3>
           <p class="institution">Islamic University of Technology (IUT) — Gazipur, Bangladesh</p>
-          <span class="gpa-pill">CGPA 3.55 (Up to 4th Year, 1st Semester)</span>
+          <span class="gpa-pill">CGPA 3.55 &nbsp;(Up to 4th Year, 1st Semester)</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     RESEARCH INTERESTS
-══════════════════════════════════ -->
+<!-- ══════════════════════════════════  RESEARCH  ══════════════════════════════════ -->
 <section id="research">
+  <div class="sec-tint"></div>
   <div class="container">
     <h2 class="section-title fade-in">Research <span>Interests</span></h2>
     <div class="section-line"></div>
 
     <div class="research-grid">
+      <!-- ML/DL -->
       <div class="research-card fade-in delay-1">
-        <span class="research-icon">🧠</span>
-        <h3>Machine Learning & Deep Learning</h3>
-        <p>Exploring neural architectures, supervised/unsupervised learning, reinforcement learning, and generative models for solving real-world engineering challenges.</p>
+        <div class="rc-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73A2 2 0 0 1 10 4a2 2 0 0 1 2-2m0 9a5 5 0 0 0-5 5v3h10v-3a5 5 0 0 0-5-5m-2.5 3a1.5 1.5 0 0 1 1.5 1.5A1.5 1.5 0 0 1 9.5 17 1.5 1.5 0 0 1 8 15.5 1.5 1.5 0 0 1 9.5 14m5 0a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5 1.5 1.5 0 0 1-1.5-1.5A1.5 1.5 0 0 1 14.5 14z"/></svg>
+        </div>
+        <h3>Machine Learning &amp; Deep Learning</h3>
+        <p>Exploring neural architectures, supervised and unsupervised learning, reinforcement learning, and generative models for solving real-world engineering challenges.</p>
         <span class="research-tag">Neural Networks</span>
-        <span class="research-tag">DNN</span>
+        <span class="research-tag">Deep Learning</span>
         <span class="research-tag">Transformers</span>
       </div>
 
+      <!-- CV -->
       <div class="research-card fade-in delay-2">
-        <span class="research-icon">👁️</span>
+        <div class="rc-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/></svg>
+        </div>
         <h3>Computer Vision</h3>
-        <p>Working with image recognition, object detection, segmentation, and video analysis systems using state-of-the-art deep learning frameworks and architectures.</p>
+        <p>Working with image recognition, object detection, segmentation, and video analysis using state-of-the-art deep learning frameworks and architectures.</p>
         <span class="research-tag">CNN</span>
         <span class="research-tag">Object Detection</span>
-        <span class="research-tag">Image Seg.</span>
+        <span class="research-tag">Segmentation</span>
       </div>
 
+      <!-- NLP -->
       <div class="research-card fade-in delay-3">
-        <span class="research-icon">💬</span>
+        <div class="rc-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-2 12H6v-2h12v2m0-3H6V9h12v2m0-3H6V6h12v2z"/></svg>
+        </div>
         <h3>Natural Language Processing (NLP)</h3>
-        <p>Investigating language models, text classification, sentiment analysis, sequence-to-sequence models, and large language model fine-tuning for diverse applications.</p>
+        <p>Investigating language models, text classification, sentiment analysis, sequence-to-sequence learning, and large language model fine-tuning for diverse applications.</p>
         <span class="research-tag">LLMs</span>
         <span class="research-tag">Text Mining</span>
         <span class="research-tag">Sentiment Analysis</span>
@@ -1045,42 +1129,50 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     PROJECTS
-══════════════════════════════════ -->
+<!-- ══════════════════════════════════  PROJECTS  ══════════════════════════════════ -->
 <section id="projects">
+  <div class="sec-tint"></div>
   <div class="container">
     <h2 class="section-title fade-in">My <span>Projects</span></h2>
     <div class="section-line"></div>
 
     <!-- Upload zone -->
-    <div class="projects-upload-area fade-in" id="uploadZone" onclick="document.getElementById('projectFileInput').click()">
+    <div class="projects-upload-area fade-in" id="uploadZone"
+         onclick="document.getElementById('projectFileInput').click()"
+         ondragover="event.preventDefault(); this.style.background='rgba(38,198,218,0.15)'"
+         ondragleave="this.style.background=''"
+         ondrop="handleDropProject(event)">
       <input type="file" id="projectFileInput" accept="image/*,video/*,.txt,.pdf,.md" onchange="handleProjectUpload(event)">
-      <div class="upload-icon">📂</div>
-      <p class="upload-label"><b>Click or drag & drop</b> to add a project</p>
-      <p class="upload-label" style="margin-top:0.3rem; font-size:0.8rem;">Upload an image, video, or document showcasing your project</p>
+      <div class="upload-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6m4 18H6V4h7v5h5v11m-7-7l-3 3h2v4h2v-4h2l-3-3z"/></svg>
+      </div>
+      <p class="upload-label"><b>Click or drag &amp; drop</b> to add a project</p>
+      <p class="upload-label" style="margin-top:0.3rem; font-size:0.78rem; color:rgba(255,255,255,0.45);">Image, video, or document file</p>
       <div class="upload-types">
-        <span class="upload-type-badge">🖼 Images</span>
-        <span class="upload-type-badge">🎥 Videos</span>
-        <span class="upload-type-badge">📄 Text/PDF</span>
+        <span class="upload-type-badge">Images</span>
+        <span class="upload-type-badge">Videos</span>
+        <span class="upload-type-badge">Text / PDF</span>
       </div>
     </div>
 
-    <!-- Text project add -->
-    <div class="card fade-in delay-1" style="margin-bottom:1.5rem;">
-      <h4 style="font-weight:700; margin-bottom:0.5rem; font-size:0.9rem; color:var(--teal);">✍️ Add a Text-Based Project</h4>
-      <input type="text" id="projTitleInput" placeholder="Project Title" style="width:100%; border:1.5px solid var(--border); border-radius:10px; padding:0.65rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; margin-bottom:0.5rem;">
-      <textarea class="add-text-area" id="projDescInput" placeholder="Describe your project here..."></textarea>
-      <br>
-      <button class="btn-add-project" onclick="addTextProject()">+ Add Project</button>
+    <!-- Text-based project -->
+    <div class="add-text-card fade-in delay-1">
+      <h4>Add a Text-Based Project</h4>
+      <input type="text" id="projTitleInput" class="proj-input" placeholder="Project Title">
+      <textarea id="projDescInput" class="proj-input" placeholder="Describe your project here..."></textarea>
+      <button class="btn-primary" onclick="addTextProject()">
+        <svg style="width:16px;height:16px;fill:#fff;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        Add Project
+      </button>
     </div>
 
-    <!-- Projects grid -->
+    <!-- Grid -->
     <div class="projects-grid" id="projectsGrid">
-      <!-- Sample card -->
       <div class="project-card fade-in">
         <div class="project-media">
-          <span class="media-icon">🔬</span>
+          <div class="media-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+          </div>
         </div>
         <div class="project-body">
           <h4>Sample Research Project</h4>
@@ -1091,27 +1183,26 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     SKILLS
-══════════════════════════════════ -->
+<!-- ══════════════════════════════════  SKILLS  ══════════════════════════════════ -->
 <section id="skills">
+  <div class="sec-tint"></div>
   <div class="container">
     <h2 class="section-title fade-in">My <span>Skills</span></h2>
     <div class="section-line"></div>
 
     <div class="skills-grid">
       <div class="skill-category fade-in delay-1">
-        <h4>💻 Programming Languages</h4>
+        <h4>Programming Languages</h4>
         <div class="skill-tags">
           <span class="skill-tag">Python</span>
-          <span class="skill-tag">Java</span>
           <span class="skill-tag">MATLAB</span>
-          <span class="skill-tag">C/C++</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">C / C++</span>
         </div>
       </div>
 
       <div class="skill-category fade-in delay-2">
-        <h4>🌐 Web Technologies</h4>
+        <h4>Web Technologies</h4>
         <div class="skill-tags">
           <span class="skill-tag">HTML5</span>
           <span class="skill-tag">CSS3</span>
@@ -1120,7 +1211,7 @@
       </div>
 
       <div class="skill-category fade-in delay-3">
-        <h4>🔧 EEE / Simulation</h4>
+        <h4>EEE / Simulation</h4>
         <div class="skill-tags">
           <span class="skill-tag">Proteus</span>
           <span class="skill-tag">OrCAD</span>
@@ -1130,7 +1221,7 @@
       </div>
 
       <div class="skill-category fade-in delay-1">
-        <h4>🤖 AI / ML Frameworks</h4>
+        <h4>AI / ML Frameworks</h4>
         <div class="skill-tags">
           <span class="skill-tag">TensorFlow</span>
           <span class="skill-tag">PyTorch</span>
@@ -1141,18 +1232,17 @@
       </div>
 
       <div class="skill-category fade-in delay-2">
-        <h4>🛠 Tools & Platforms</h4>
+        <h4>Tools &amp; Platforms</h4>
         <div class="skill-tags">
           <span class="skill-tag">Git</span>
           <span class="skill-tag">Jupyter</span>
           <span class="skill-tag">VS Code</span>
-          <span class="skill-tag">Kaggle</span>
           <span class="skill-tag">Linux</span>
         </div>
       </div>
 
       <div class="skill-category fade-in delay-3">
-        <h4>📊 Data & Analysis</h4>
+        <h4>Data &amp; Analysis</h4>
         <div class="skill-tags">
           <span class="skill-tag">Matplotlib</span>
           <span class="skill-tag">Seaborn</span>
@@ -1164,10 +1254,9 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     OTHER PROFILES
-══════════════════════════════════ -->
+<!-- ══════════════════════════════════  OTHER PROFILES  ══════════════════════════════════ -->
 <section id="other-profiles">
+  <div class="sec-tint"></div>
   <div class="container">
     <h2 class="section-title fade-in">Other <span>Profiles</span></h2>
     <div class="section-line"></div>
@@ -1176,17 +1265,19 @@
       <div class="profile-dropdown-wrap">
         <select class="profile-select" onchange="showProfilePanel(this.value)">
           <option value="">— Select a platform —</option>
-          <option value="cody">🏆 MATLAB Cody</option>
-          <option value="kaggle">📊 Kaggle</option>
+          <option value="cody">MATLAB Cody</option>
+          <option value="kaggle">Kaggle</option>
         </select>
         <svg class="dropdown-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
-      <!-- CODY PANEL -->
+      <!-- CODY -->
       <div class="profile-panel" id="panel-cody">
         <div class="profile-info-card">
           <div class="profile-platform">
-            <div class="platform-logo">🧮</div>
+            <div class="platform-logo">
+              <svg viewBox="0 0 24 24"><path d="M5 3l3.057-3L12 3.5 15.943 0 19 3l-3 3 3 3-3.057 3L12 8.5 8.057 12 5 9l3-3-3-3zm7 8.5L8.057 15 5 12l3-3 4 2.5zM19 12l-3.057 3L12 12.5l4-2.5 3 2z"/></svg>
+            </div>
             <div>
               <p class="platform-name">MATLAB Cody</p>
               <p class="platform-sub">MathWorks Community Platform</p>
@@ -1203,7 +1294,7 @@
               <span class="stat-label">Problems Created</span>
             </div>
             <div class="stat-box">
-              <span class="stat-num">388<sup style="font-size:0.9rem">th</sup></span>
+              <span class="stat-num">388</span>
               <span class="stat-label">Highest Rank</span>
             </div>
             <div class="stat-box">
@@ -1212,48 +1303,37 @@
             </div>
           </div>
 
-          <p style="font-size:0.88rem; color:var(--text2); line-height:1.65; margin-bottom:0.5rem;">
-            So far, I have solved around <strong>338 problems</strong> in MATLAB Cody. I also created around <strong>8 new problems</strong> for the community. My highest ranking in Cody was <strong>388th</strong> with <strong>10 badges</strong> earned across various challenge categories.
+          <p class="profile-desc">
+            I have solved around <strong style="color:#fff;">338 problems</strong> in MATLAB Cody and created <strong style="color:#fff;">8 new problems</strong> for the community. My highest ranking was <strong style="color:#fff;">388th</strong> globally, with <strong style="color:#fff;">10 badges</strong> earned across various challenge categories.
           </p>
 
-          <a class="profile-link-btn" href="https://ww2.mathworks.cn/matlabcentral/profile/authors/30488592?s_tid=cody_local_to_profile" target="_blank" rel="noopener">
-            🔗 View Cody Profile
+          <a class="btn-primary" href="https://ww2.mathworks.cn/matlabcentral/profile/authors/30488592?s_tid=cody_local_to_profile" target="_blank" rel="noopener" style="margin-top:0.5rem;">
+            <svg style="width:16px;height:16px;fill:#fff;" viewBox="0 0 24 24"><path d="M14 3v2H7v14h14v-7h2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m5 0v6h-2V6.41l-7.29 7.3-1.42-1.42L17.59 5H15V3h4z"/></svg>
+            View Cody Profile
           </a>
         </div>
       </div>
 
-      <!-- KAGGLE PANEL -->
+      <!-- KAGGLE -->
       <div class="profile-panel" id="panel-kaggle">
         <div class="profile-info-card">
           <div class="profile-platform">
-            <div class="platform-logo">📊</div>
+            <div class="platform-logo">
+              <svg viewBox="0 0 24 24"><path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.505c-.236 0-.354-.117-.354-.352V.353c0-.233.118-.353.354-.353h2.431c.234 0 .351.12.351.353v14.343l6.203-6.272c.165-.165.33-.246.495-.246h3.239c.144 0 .236.06.285.18.046.149.034.255-.036.315l-6.555 6.344 6.836 8.507c.095.104.117.208.07.336"/></svg>
+            </div>
             <div>
               <p class="platform-name">Kaggle</p>
-              <p class="platform-sub">Data Science & ML Platform</p>
+              <p class="platform-sub">Data Science &amp; ML Competition Platform</p>
             </div>
           </div>
 
-          <p style="font-size:0.88rem; color:var(--text2); line-height:1.65; margin-bottom:1rem;">
-            Active on <strong>Kaggle</strong> — participating in machine learning competitions, sharing datasets, and building data science notebooks. Continuously enhancing skills through real-world ML challenges and collaborative projects.
+          <p class="profile-desc" style="margin-bottom:1rem;">
+            Active on <strong style="color:#fff;">Kaggle</strong> — participating in machine learning competitions, sharing datasets, and building data science notebooks. Continuously enhancing skills through real-world ML challenges and collaborative projects.
           </p>
 
-          <div class="stats-row">
-            <div class="stat-box">
-              <span class="stat-num">🏅</span>
-              <span class="stat-label">Competitor</span>
-            </div>
-            <div class="stat-box">
-              <span class="stat-num">📓</span>
-              <span class="stat-label">Notebooks</span>
-            </div>
-            <div class="stat-box">
-              <span class="stat-num">🤝</span>
-              <span class="stat-label">Collaborator</span>
-            </div>
-          </div>
-
-          <a class="profile-link-btn" href="https://www.kaggle.com/sahilislam111" target="_blank" rel="noopener">
-            🔗 View Kaggle Profile
+          <a class="btn-primary" href="https://www.kaggle.com/sahilislam111" target="_blank" rel="noopener">
+            <svg style="width:16px;height:16px;fill:#fff;" viewBox="0 0 24 24"><path d="M14 3v2H7v14h14v-7h2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m5 0v6h-2V6.41l-7.29 7.3-1.42-1.42L17.59 5H15V3h4z"/></svg>
+            View Kaggle Profile
           </a>
         </div>
       </div>
@@ -1261,11 +1341,10 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════
-     CV
-══════════════════════════════════ -->
+<!-- ══════════════════════════════════  CV  ══════════════════════════════════ -->
 <section id="cv">
-  <div class="container" style="display:flex; justify-content:center;">
+  <div class="sec-tint"></div>
+  <div class="container" style="display:flex;justify-content:center;">
     <div class="cv-container fade-in">
       <h2 class="section-title" style="text-align:center;">My <span>Curriculum Vitae</span></h2>
       <div class="section-line" style="margin:0 auto 2.5rem;"></div>
@@ -1276,73 +1355,82 @@
            ondrop="handleCVDrop(event)"
            onclick="document.getElementById('cvFileInput').click()">
         <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" onchange="handleCVUpload(event)">
-        <div class="cv-upload-icon">📋</div>
+        <div class="cv-upload-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6m4 18H6V4h7v5h5v11m-3-7H8v-2h8v2m0 4H8v-2h8v2z"/></svg>
+        </div>
         <h3 class="cv-upload-title">Upload Your CV</h3>
-        <p class="cv-upload-sub">Drag & drop or click to browse · PDF, DOC, DOCX supported</p>
+        <p class="cv-upload-sub">Drag &amp; drop or click to browse &nbsp;·&nbsp; PDF, DOC, DOCX supported</p>
       </div>
 
       <div class="cv-file-info" id="cvFileInfo">
-        <span class="cv-file-icon">📄</span>
+        <div class="cv-file-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6m4 18H6V4h7v5h5v11m-3-7H8v-2h8v2m0 4H8v-2h8v2z"/></svg>
+        </div>
         <div>
           <p class="cv-file-name" id="cvFileName">—</p>
           <p class="cv-file-size" id="cvFileSize">—</p>
         </div>
-        <button onclick="removeCVFile()" style="margin-left:auto; background:none; border:1.5px solid #fca5a5; border-radius:8px; padding:0.35rem 0.75rem; color:#ef4444; cursor:pointer; font-size:0.8rem; font-weight:600;">✕ Remove</button>
+        <button class="btn-remove" onclick="removeCVFile()">Remove</button>
       </div>
 
-      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-        <a class="btn-download" id="cvDownloadBtn" href="#" download onclick="return downloadCV(event)">
-          ⬇️ Download CV
+      <div class="cv-btns">
+        <a class="btn-primary" id="cvDownloadBtn" href="#" download onclick="return downloadCV(event)">
+          <svg style="width:16px;height:16px;fill:#fff;" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          Download CV
         </a>
-        <button class="btn-download" style="background: linear-gradient(135deg, #1d4ed8, #0d9488);" onclick="document.getElementById('cvFileInput').click()">
-          📤 Replace CV
+        <button class="btn-primary" style="background:rgba(255,255,255,0.15);box-shadow:none;" onclick="document.getElementById('cvFileInput').click()">
+          <svg style="width:16px;height:16px;fill:#fff;" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+          Replace CV
         </button>
       </div>
 
-      <p style="font-size:0.78rem; color:var(--text2); margin-top:1.2rem; opacity:0.7;">
-        Upload your CV file above to enable the download button. Your file stays private in your browser.
-      </p>
+      <p class="cv-note">Upload your CV to enable the download button. The file stays locally in your browser.</p>
     </div>
   </div>
 </section>
 
 <!-- ── FOOTER ── -->
 <footer>
-  <p>Designed & built with ❤️ — <span>Sahil Islam</span> · EEE, IUT · 2025</p>
-  <p style="margin-top:0.3rem;">sahilisalm@iut-dhaka.edu</p>
+  <div class="footer-left">Sahil <span>Islam</span> &nbsp;·&nbsp; EEE, IUT &nbsp;·&nbsp; 2025</div>
+  <div class="footer-contact">
+    <p class="footer-contact-label">Connect</p>
+    <div class="footer-icons">
+      <a class="footer-icon" href="mailto:sahilisalm@iut-dhaka.edu" title="Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2-8 5-8-5h16zm0 12H4V8.99l8 5 8-5V18z"/></svg>
+      </a>
+      <a class="footer-icon" href="https://www.linkedin.com/in/sahilislam/?isSelfProfile=false" target="_blank" rel="noopener" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+    </div>
+  </div>
 </footer>
 
 <script>
 // ── NAV ACTIVE STATES ──
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-links a');
+const sectionEls = document.querySelectorAll('section');
+const navLinkEls = document.querySelectorAll('.nav-links a');
 
-const observer = new IntersectionObserver((entries) => {
+const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      navLinks.forEach(link => {
+      navLinkEls.forEach(link => {
         link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
       });
     }
   });
 }, { threshold: 0.35 });
 
-sections.forEach(s => observer.observe(s));
+sectionEls.forEach(s => sectionObserver.observe(s));
 
-// ── HAMBURGER ──
-function toggleMenu() {
-  document.getElementById('navLinks').classList.toggle('open');
-}
-function closeMenu() {
-  document.getElementById('navLinks').classList.remove('open');
-}
+function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
+function closeMenu()  { document.getElementById('navLinks').classList.remove('open'); }
 
-// ── PROFILE PHOTO UPLOAD ──
+// ── PROFILE PHOTO ──
 function uploadProfilePhoto(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => {
+  reader.onload = ev => {
     const img = document.getElementById('profileImg');
     img.src = ev.target.result;
     img.style.display = 'block';
@@ -1351,18 +1439,14 @@ function uploadProfilePhoto(e) {
   reader.readAsDataURL(file);
 }
 
-// ── DRAG OVER UPLOAD ZONE ──
-const uploadZone = document.getElementById('uploadZone');
-uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.background = 'rgba(209,250,229,0.55)'; });
-uploadZone.addEventListener('dragleave', () => { uploadZone.style.background = ''; });
-uploadZone.addEventListener('drop', e => {
+// ── PROJECT UPLOADS ──
+function handleDropProject(e) {
   e.preventDefault();
-  uploadZone.style.background = '';
-  const files = e.dataTransfer.files;
-  if (files.length) processProjectFile(files[0]);
-});
+  document.getElementById('uploadZone').style.background = '';
+  const f = e.dataTransfer.files[0];
+  if (f) processProjectFile(f);
+}
 
-// ── PROJECT FILE UPLOAD ──
 function handleProjectUpload(e) {
   const file = e.target.files[0];
   if (file) processProjectFile(file);
@@ -1374,28 +1458,23 @@ function processProjectFile(file) {
   const name = file.name.replace(/\.[^.]+$/, '');
   const reader = new FileReader();
 
-  reader.onload = (ev) => {
+  reader.onload = ev => {
     const card = document.createElement('div');
     card.className = 'project-card fade-in';
-
     let mediaHTML = '';
+
     if (type.startsWith('image/')) {
-      mediaHTML = `<div class="project-media"><img src="${ev.target.result}" alt="${name}"><button class="project-delete" onclick="this.closest('.project-card').remove()">✕</button></div>`;
+      mediaHTML = `<div class="project-media" style="position:relative;"><img src="${ev.target.result}" alt="${name}"><button class="project-delete" onclick="this.closest('.project-card').remove()">&#10005;</button></div>`;
     } else if (type.startsWith('video/')) {
-      mediaHTML = `<div class="project-media"><video controls src="${ev.target.result}"></video><button class="project-delete" onclick="this.closest('.project-card').remove()">✕</button></div>`;
+      mediaHTML = `<div class="project-media" style="position:relative;"><video controls src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;"></video><button class="project-delete" onclick="this.closest('.project-card').remove()">&#10005;</button></div>`;
     } else {
-      const preview = ev.target.result.substring(0, 200) + (ev.target.result.length > 200 ? '…' : '');
-      mediaHTML = `<div class="project-media" style="align-items:flex-start; padding:1rem; background:var(--grad2);"><span style="font-size:0.75rem; font-family:'Fira Code',monospace; color:var(--text2); text-align:left; white-space:pre-wrap; overflow:hidden;">${preview}</span><button class="project-delete" onclick="this.closest('.project-card').remove()">✕</button></div>`;
+      const preview = ev.target.result.substring(0, 220) + (ev.target.result.length > 220 ? '…' : '');
+      mediaHTML = `<div class="project-media" style="position:relative;align-items:flex-start;padding:1rem;"><span style="font-size:0.72rem;font-family:'Fira Code',monospace;color:rgba(255,255,255,0.6);text-align:left;white-space:pre-wrap;overflow:hidden;">${preview}</span><button class="project-delete" onclick="this.closest('.project-card').remove()">&#10005;</button></div>`;
     }
 
-    card.innerHTML = `
-      ${mediaHTML}
-      <div class="project-body">
-        <h4 contenteditable="true" style="outline:none; border-bottom:1px dashed #ccc; padding-bottom:2px;">${name}</h4>
-        <p contenteditable="true" style="outline:none; color:var(--text2);">Click to add a description for this project...</p>
-      </div>
-    `;
+    card.innerHTML = `${mediaHTML}<div class="project-body"><h4 contenteditable="true" style="outline:none;border-bottom:1px dashed rgba(255,255,255,0.2);padding-bottom:3px;">${name}</h4><p contenteditable="true" style="outline:none;">Click to add a description...</p></div>`;
     document.getElementById('projectsGrid').appendChild(card);
+    card.style.animationPlayState = 'running';
   };
 
   if (type.startsWith('image/') || type.startsWith('video/')) {
@@ -1405,29 +1484,26 @@ function processProjectFile(file) {
   }
 }
 
-// ── TEXT PROJECT ADD ──
 function addTextProject() {
   const title = document.getElementById('projTitleInput').value.trim() || 'Untitled Project';
-  const desc = document.getElementById('projDescInput').value.trim() || 'No description provided.';
+  const desc  = document.getElementById('projDescInput').value.trim()  || 'No description provided.';
 
   const card = document.createElement('div');
   card.className = 'project-card fade-in';
   card.innerHTML = `
-    <div class="project-media" style="background:var(--grad2); align-items:center; justify-content:center; position:relative;">
-      <span class="media-icon">📝</span>
-      <button class="project-delete" onclick="this.closest('.project-card').remove()">✕</button>
+    <div class="project-media" style="position:relative;">
+      <div class="media-icon-wrap"><svg style="width:26px;height:26px;fill:rgba(255,255,255,0.7);" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6m4 18H6V4h7v5h5v11m-3-7H8v-2h8v2m0 4H8v-2h8v2z"/></svg></div>
+      <button class="project-delete" onclick="this.closest('.project-card').remove()">&#10005;</button>
     </div>
-    <div class="project-body">
-      <h4>${title}</h4>
-      <p>${desc}</p>
-    </div>
+    <div class="project-body"><h4>${title}</h4><p>${desc}</p></div>
   `;
   document.getElementById('projectsGrid').appendChild(card);
+  card.style.animationPlayState = 'running';
   document.getElementById('projTitleInput').value = '';
   document.getElementById('projDescInput').value = '';
 }
 
-// ── OTHER PROFILES ──
+// ── PROFILES DROPDOWN ──
 function showProfilePanel(val) {
   document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
   if (val) {
@@ -1436,19 +1512,16 @@ function showProfilePanel(val) {
   }
 }
 
-// ── CV UPLOAD ──
+// ── CV ──
 let cvFile = null;
 
-function handleCVUpload(e) {
-  const file = e.target.files[0];
-  if (file) setCVFile(file);
-}
+function handleCVUpload(e) { const f = e.target.files[0]; if (f) setCVFile(f); }
 
 function handleCVDrop(e) {
   e.preventDefault();
   document.getElementById('cvUploadZone').classList.remove('drag-over');
-  const file = e.dataTransfer.files[0];
-  if (file) setCVFile(file);
+  const f = e.dataTransfer.files[0];
+  if (f) setCVFile(f);
 }
 
 function setCVFile(file) {
@@ -1467,34 +1540,28 @@ function removeCVFile() {
 }
 
 function downloadCV(e) {
-  if (!cvFile) {
-    e.preventDefault();
-    alert('Please upload your CV file first.');
-    return false;
-  }
+  if (!cvFile) { e.preventDefault(); alert('Please upload your CV first.'); return false; }
   const url = URL.createObjectURL(cvFile);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = cvFile.name;
-  a.click();
+  a.href = url; a.download = cvFile.name; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
   return false;
 }
 
 // ── SCROLL ANIMATIONS ──
 const fadeEls = document.querySelectorAll('.fade-in');
-const fadeObserver = new IntersectionObserver((entries) => {
+const fadeObs = new IntersectionObserver((entries) => {
   entries.forEach(el => {
     if (el.isIntersecting) {
       el.target.style.animationPlayState = 'running';
-      fadeObserver.unobserve(el.target);
+      fadeObs.unobserve(el.target);
     }
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.1 });
 
 fadeEls.forEach(el => {
   el.style.animationPlayState = 'paused';
-  fadeObserver.observe(el);
+  fadeObs.observe(el);
 });
 </script>
 </body>
